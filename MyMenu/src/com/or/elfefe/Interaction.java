@@ -4,6 +4,7 @@ import java.util.Scanner;
 
 public class Interaction {
     static Scanner sc = new Scanner(System.in);
+    static String orderSummary = "";
     /**
      * Display a question about a category in the standard input, get response and display it
      * @param category the category of the question
@@ -19,9 +20,11 @@ public class Interaction {
         do {
             nbResponse = sc.nextInt();
             responseIsGood = (nbResponse >= 1 && nbResponse <= responses.length);
-            if (responseIsGood)
-                System.out.println("Vous avez choisi comme " + category + " : " + responses[nbResponse - 1]);
-            else {
+            if (responseIsGood) {
+                String choice = "Vous avez choisi comme " + category + " : " + responses[nbResponse - 1];
+                orderSummary += choice + "%n";
+                System.out.println(choice);
+            } else {
                 boolean isVowel = "aeiouy".contains(Character.toString(category.charAt(0)));
                 if (isVowel)
                     System.out.println("Vous n'avez pas choisi d'" + category + " parmi les choix proposés");

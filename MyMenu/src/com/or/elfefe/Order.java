@@ -85,9 +85,13 @@ public class Order {
     public void runMenus() {
         System.out.println("Combien souhaitez vous commander de menu ?");
         int menuQuantity = Interaction.sc.nextInt();
+        Interaction.orderSummary = "Résumé de votre commande :%n";
         for (int i = 0; i < menuQuantity; i++) {
+            Interaction.orderSummary += "Menu " + (i + 1) + ":%n";
             run_menu();
         }
+        System.out.println("");
+        System.out.println(String.format(Interaction.orderSummary));
     }
     /**
      * Display a selected side depending on all sides enable or not.
