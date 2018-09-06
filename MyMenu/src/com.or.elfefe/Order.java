@@ -4,7 +4,7 @@ public class Order {
         /**
          * Display all available menus in the restaurant.
          */
-        public void displayAvailableMenus() {
+        public void displayAvailableMenu() {
 
         }
 
