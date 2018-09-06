@@ -1,7 +1,5 @@
 package com.or.elfefe;
 
-import java.util.Scanner;
-
 public class Order {
         /**
          * Display all available menus in the restaurant.
@@ -66,34 +64,31 @@ public class Order {
     }
 
         public void run_menu(){
-            this.displayAvailableMenu();
-            Scanner sc = new Scanner(System.in);
-            int nbMenu = sc.nextInt();
-            this.displaySelectedMenu(nbMenu);
+            int nbMenu = askMenu();
             switch (nbMenu) {
                 case 1:
-                    displayAvailableSide(true);
-                    int nbSide = sc.nextInt();
-                    displaySelectedSide(nbSide, true);
-                    displayAvailableDrink();
-                    int nbDrink = sc.nextInt();
-                    displaySelectedDrink(nbDrink);
+                    askSide(true);
+                    askDrink();
                     break;
                 case 2:
-                    displayAvailableSide(true);
-                    nbSide = sc.nextInt();
-                    displaySelectedSide(nbSide, true);
+                    askSide(true);
                     break;
                 case 3:
-                    displayAvailableSide(false);
-                    nbSide = sc.nextInt();
-                    displaySelectedSide(nbSide, false);
-                    displayAvailableDrink();
-                    nbDrink = sc.nextInt();
-                    displaySelectedDrink(nbDrink);
+                    askSide(false);
+                    askDrink();
                     break;
             }
         }
+    /**
+     * Run asking process for several menus.
+     */
+    public void runMenus() {
+        System.out.println("Combien souhaitez vous commander de menu ?");
+        int menuQuantity = Interaction.sc.nextInt();
+        for (int i = 0; i < menuQuantity; i++) {
+            run_menu();
+        }
+    }
     /**
      * Display a selected side depending on all sides enable or not.
      * All sides = vegetables, frites and rice
@@ -150,5 +145,33 @@ public class Order {
                 System.out.println("Vous n'avez pas choisi de boisson parmi les choix proposés");
                 break;
         }
+    }
+    /**
+     * Display a question about menu in the standard input, get response and display it
+     */
+    public int askMenu() {
+        String[] menus = {"poulet", "boeuf", "végétarien"};
+        return Interaction.askSomething("menu", menus);
+    }
+
+    /**
+     * Display a question about side in the standard input, get response and display it
+     */
+    public void askSide(boolean allSidesEnable) {
+        if (allSidesEnable) {
+            String[] responsesAllSide = {"légumes frais", "frites", "riz"};
+            Interaction.askSomething("accompagnement", responsesAllSide);
+        } else {
+            String[] responsesOnlyRice = {"riz", "pas de riz"};
+            Interaction.askSomething("accompagnement", responsesOnlyRice);
+        }
+    }
+
+    /**
+     * Display a question about drink in the standard input, get response and display it
+     */
+    public void askDrink() {
+        String[] responsesDrink = {"eau plate", "eau gazeuse", "soda"};
+        Interaction.askSomething("boisson", responsesDrink);
     }
 }
