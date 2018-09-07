@@ -1,5 +1,6 @@
 package com.or.elfefe;
 
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class Interaction {
@@ -15,11 +16,16 @@ public class Interaction {
         for (int i = 1; i <= responses.length; i++)
             System.out.println(i + " - " + responses[i - 1]);
         System.out.println("Que souhaitez-vous comme " + category + "?");
-        int nbResponse;
+        int nbResponse = 0;
         boolean responseIsGood;
         do {
-            nbResponse = sc.nextInt();
-            responseIsGood = (nbResponse >= 1 && nbResponse <= responses.length);
+            try {
+                nbResponse = sc.nextInt();
+                responseIsGood = (nbResponse >= 1 && nbResponse <= responses.length);
+            } catch (InputMismatchException e) {
+                sc.next();
+                responseIsGood = false;
+            }
             if (responseIsGood) {
                 String choice = "Vous avez choisi comme " + category + " : " + responses[nbResponse - 1];
                 orderSummary += choice + "%n";

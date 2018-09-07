@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.PrintStream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -144,7 +145,11 @@ public class OrderTest {
     public void Given_OneMenuChikenWithFriesAndWaterInStandardInput_When_MenusIsRun_Then_DisplayCorrectProcess() {
         System.setIn(new ByteArrayInputStream("1\n1\n2\n3\n".getBytes()));
         order = new Order();
-        order.runMenus();
+        try {
+            order.runMenus();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         String[] output = outContent.toString().replace("\r\n", "\n").split("\n");
         assertEquals("Vous avez choisi comme menu : poulet", output[6]);
         assertEquals("Vous avez choisi comme accompagnement : frites", output[12]);
@@ -154,7 +159,11 @@ public class OrderTest {
     public void Given_TwoMenu_BeefWithVegetable_VegetarianWithNoRiceAndSparklingWaterInStandardInput_When_MenusIsRun_Then_DisplayCorrectProcess() {
         System.setIn(new ByteArrayInputStream("2\n2\n1\n3\n2\n2\n".getBytes()));
         order = new Order();
-        order.runMenus();
+        try {
+            order.runMenus();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         String[] output = outContent.toString().replace("\r\n", "\n").split("\n");
         assertEquals("Vous avez choisi comme menu : boeuf", output[6]);
         assertEquals("Vous avez choisi comme accompagnement : légumes frais", output[12]);
@@ -256,7 +265,11 @@ public class OrderTest {
     public void Given_Responses_When_CallingRunMenus_Then_FillOrderSummaryCorrectly() {
         System.setIn(new ByteArrayInputStream(String.format("2%n1%n1%n1%n2%n2%n").getBytes()));
         order = new Order();
-        order.runMenus();
+        try {
+            order.runMenus();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         assertEquals("Résumé de votre commande :%n" +
                 "Menu 1:%n" +
                 "Vous avez choisi comme menu : poulet%n" +
@@ -265,5 +278,26 @@ public class OrderTest {
                 "Menu 2:%n" +
                 "Vous avez choisi comme menu : boeuf%n" +
                 "Vous avez choisi comme accompagnement : frites%n" , Interaction.orderSummary);
+    }
+    @Test
+    public void Given_TextResponse_When_CallingAskQuestion_Then_DisplayErrorSentence() {
+        System.setIn(new ByteArrayInputStream(String.format("texte%n1%n").getBytes()));
+        order = new Order();
+        String[] responses = {"BMW", "Audi", "Mercedes"};
+        Interaction.askSomething("voiture", responses);
+        String[] output = outContent.toString().replace("\r\n", "\n").split("\n");
+        assertEquals("Vous n'avez pas choisi de voiture parmi les choix proposés", output[5]);
+    }
+    @Test
+    public void Given_BadMenusQuantityInStandardInput_When_MenusIsRun_Then_DisplayErrorSentence() {
+        System.setIn(new ByteArrayInputStream(String.format("texte%n1%n1%n2%n3%n").getBytes()));
+        order = new Order();
+        try {
+            order.runMenus();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        String[] output = outContent.toString().replace("\r\n", "\n").split("\n");
+        assertEquals("Vous devez saisir un nombre, correspondant au nombre de menus souhaités", output[1]);
     }
 }
